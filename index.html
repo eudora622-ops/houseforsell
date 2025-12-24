@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>房地合一稅獲利試算 - 徐甯恩</title>
+    <style>
+        /* --- 全局設定 --- */
+        :root {
+            --primary-dark: #1a1a1a;
+            --secondary-dark: #2c3e50; /* 用於名字的深藍灰 */
+            --accent-gold: #bfa472;
+            --line-green: #00c300;   /* LINE 官方亮綠色 */
+            --bg-color: #dce0e4;
+            --card-bg: #ffffff;
+            --text-main: #333333;
+            --text-sub: #666666;
+            --danger: #d93025;
+        }
+
+        body {
+            font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            
+            /* 禁止選取文字保護 */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .container {
+            background-color: var(--card-bg);
+            width: 90%;
+            max-width: 550px;
+            margin: 40px 20px;
+            padding: 50px 40px; /* 增加上方內距 */
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        /* --- 頂部品牌區塊 (新設計) --- */
+        .header-branding {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 30px;
+        }
+
+        .logo-img {
+            max-width: 120px; /* Logo 大小，可自行調整 */
+            height: auto;
+            margin-bottom: 15px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* 如果暫時沒有圖片，這是一個文字 Logo 的替代樣式 */
+        .text-logo {
+            font-family: serif;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #222;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .company-title {
+            color: #5eaebc; /* 稍微帶點藍灰的質感色，或是您原本的灰色 */
+            color: #666;
+            font-weight: 600;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        /* 名字與按鈕的橫向排列 */
+        .name-action-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 12px;
+        }
+
+        .big-name {
+            font-size: 2.4rem;
+            font-weight: 900;
+            color: var(--secondary-dark); /* 深色字體 */
+            letter-spacing: 2px;
+            line-height: 1;
+        }
+
+        .top-line-btn {
+            background-color: var(--line-green);
+            color: white;
+            text-decoration: none;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(0, 195, 0, 0.3);
+            transition: transform 0.2s, opacity 0.2s;
+            white-space: nowrap; /* 不換行 */
+        }
+
+        .top-line-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .specialty-text {
+            color: #888;
+            font-size: 0.95rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+
+        /* --- 原本的標題 --- */
+        h1 {
+            font-size: 1.5rem; /* 稍微縮小，避免搶過名字風采 */
+            font-weight: 600;
+            text-align: center;
+            margin: 0 0 25px 0;
+            color: var(--primary-dark);
+            letter-spacing: 1.5px;
+        }
+
+        /* --- 警示框 --- */
+        .warning-box {
+            background-color: #fff8e6;
+            border-left: 4px solid #ffb300;
+            padding: 15px;
+            margin-bottom: 30px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            color: #8c6b1f;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* --- 稅率表格 --- */
+        .rate-table-container {
+            margin-bottom: 35px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #eee;
+        }
+
+        .rate-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        .rate-table th {
+            background-color: var(--primary-dark);
+            color: #fff;
+            padding: 14px;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+
+        .rate-table td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+            color: var(--text-sub);
+        }
+
+        .rate-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* --- 表單樣式 --- */
+        .form-section {
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #444;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            box-sizing: border-box;
+            background-color: #fcfcfc;
+            user-select: text;
+            -webkit-user-select: text;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary-dark);
+            background-color: #fff;
+            box-shadow: 0 0 0 3px rgba(26, 26, 26, 0.1);
+        }
+
+        .hint-text {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 6px;
+            margin-left: 2px;
+        }
+
+        .auto-calc-text {
+            float: right;
+            font-size: 0.85rem;
+            color: var(--danger);
+            font-weight: 500;
+        }
+
+        /* --- 計算按鈕 --- */
+        .btn-calc {
+            background-color: var(--primary-dark);
+            color: #fff;
+            border: none;
+            padding: 18px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s;
+            letter-spacing: 2px;
+            font-weight: 600;
+        }
+
+        .btn-calc:hover {
+            background-color: #333;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        /* --- 結果顯示區 --- */
+        .result-section {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px dashed #e5e7eb;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-item {
+            margin-bottom: 25px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 12px;
+            border-left: 5px solid var(--primary-dark);
+            user-select: text;
+            -webkit-user-select: text;
+        }
+
+        .result-title {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .result-value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+            font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        
+        .result-note {
+            font-size: 0.8rem;
+            color: #999;
+            margin-top: 8px;
+        }
+
+        /* --- 底部 (僅保留地址與版權) --- */
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            text-align: center;
+            color: #999;
+        }
+
+        .footer-address {
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 15px;
+        }
+
+        .copyright {
+            font-size: 0.75rem;
+            color: #aaa;
+        }
+
+        input:read-only {
+            background-color: #eee;
+            color: #555;
+            cursor: default;
+            border-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="header-branding">
+            <img src="logo.png" alt="JIA LABEL Logo" class="logo-img">
+            
+            <div class="company-title">台南寶家・台灣房屋</div>
+            
+            <div class="name-action-row">
+                <div class="big-name">徐甯恩</div>
+                <a href="https://line.me/ti/p/~eudora622" target="_blank" class="top-line-btn">
+                    更多諮詢
+                </a>
+            </div>
+            
+            <div class="specialty-text">專營預售屋 / 新成屋 / 建商保留戶</div>
+        </div>
+
+
+        <h1>房地合一稅獲利試算</h1>
+
+        <div class="warning-box">
+            <span style="font-size: 1.2rem;">⚠️</span>
+            <span>注意：此計算方式適用於民國 105 年以後取得之房屋</span>
+        </div>
+
+        <div class="rate-table-container">
+            <table class="rate-table">
+                <thead>
+                    <tr>
+                        <th colspan="2">房地合一稅 持有期間稅率表</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>持有 2 年以下</td>
+                        <td>45%</td>
+                    </tr>
+                    <tr>
+                        <td>持有 2 ~ 5 年</td>
+                        <td>35%</td>
+                    </tr>
+                    <tr>
+                        <td>持有 5 ~ 10 年</td>
+                        <td>20%</td>
+                    </tr>
+                    <tr>
+                        <td>持有 10 年以上</td>
+                        <td>15%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <form id="calcForm" class="form-section">
+            <div class="input-group">
+                <label>1. 房屋取得成本 (元)</label>
+                <input type="number" id="costPrice" placeholder="請輸入買入時的總價">
+            </div>
+            <div class="input-group">
+                <label>2. 購買時仲介發票 (元)</label>
+                <input type="number" id="buyAgentFee" placeholder="買入時支付的服務費">
+            </div>
+            <div class="input-group">
+                <label>3. 雜項費用 (元)</label>
+                <input type="number" id="miscFee" placeholder="如：契稅、代書費、規費等">
+            </div>
+            <div class="input-group">
+                <label>4. 裝潢發票費用 (元)</label>
+                <input type="number" id="renoFee" placeholder="限：不可移動之裝潢">
+                <div class="hint-text">*此項目將用於扣抵稅額，但不列入實賺現金流計算</div>
+            </div>
+            <hr style="border: 0; border-top: 1px solid #eee; width: 100%; margin: 5px 0;">
+            <div class="input-group">
+                <label>
+                    5. 預計賣出金額 (元)
+                </label>
+                <input type="number" id="sellPrice" placeholder="請輸入預計賣出的總價" oninput="updateAgentFee()">
+            </div>
+            <div class="input-group">
+                <label>
+                    6. 賣出仲介費 (預設 4%)
+                    <span class="auto-calc-text" id="agentFeeDisplay">尚未計算</span>
+                </label>
+                <input type="number" id="sellAgentFee" readonly>
+                <div class="hint-text">*系統依賣出金額自動計算 4%</div>
+            </div>
+            <div class="input-group">
+                <label>7. 預計持有年限</label>
+                <select id="holdingPeriod">
+                    <option value="0.45">2 年以下 (稅率 45%)</option>
+                    <option value="0.35">2 ~ 5 年 (稅率 35%)</option>
+                    <option value="0.20">5 ~ 10 年 (稅率 20%)</option>
+                    <option value="0.15">10 年以上 (稅率 15%)</option>
+                </select>
+            </div>
+            <button type="button" class="btn-calc" onclick="calculate()">開始試算</button>
+        </form>
+
+        <div id="resultSection" class="result-section">
+            <div class="result-item">
+                <div class="result-title">預估需繳納房地合一稅</div>
+                <div class="result-value" id="taxResult">0 元</div>
+                <div class="result-note">計算公式：(賣出金額 - 賣出仲介費 - 取得成本 - 買入仲介費 - 雜項 - 裝潢) × 稅率</div>
+            </div>
+            <div class="result-item" style="border-left-color: var(--accent-gold);">
+                <div class="result-title">賣方可實賺金額 <span style="font-size: 0.85em; font-weight: normal; color:#888;">(不含裝潢費用)</span></div>
+                <div class="result-value" id="profitResult">0 元</div>
+                <div class="result-note">計算公式：賣出金額 - (房屋持有成本 + 購買仲介費 + 雜項費用 + 賣出仲介費 + 房地合一稅)</div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="footer-address">公司地址：台南市北區北安路一段271號</div>
+            <div class="copyright">
+                © 2025 Jia Label. All Rights Reserved.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 防護腳本
+        document.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'F12' || e.keyCode === 123) { e.preventDefault(); return false; }
+            if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'C' || e.key === 'J')) { e.preventDefault(); return false; }
+            if (e.ctrlKey && (e.key === 'u' || e.key === 'U' || e.key === 's' || e.key === 'S')) { e.preventDefault(); return false; }
+        });
+
+        // 計算邏輯
+        function updateAgentFee() {
+            const sellPrice = parseFloat(document.getElementById('sellPrice').value) || 0;
+            const fee = Math.round(sellPrice * 0.04);
+            document.getElementById('sellAgentFee').value = fee;
+            const display = document.getElementById('agentFeeDisplay');
+            if(sellPrice > 0) {
+                display.innerText = "預估費用: " + fee.toLocaleString() + " 元";
+                display.style.color = "#d93025";
+            } else {
+                display.innerText = "尚未計算";
+                display.style.color = "#ccc";
+            }
+        }
+
+        function calculate() {
+            const costPrice = parseFloat(document.getElementById('costPrice').value) || 0;
+            const buyAgentFee = parseFloat(document.getElementById('buyAgentFee').value) || 0;
+            const miscFee = parseFloat(document.getElementById('miscFee').value) || 0;
+            const renoFee = parseFloat(document.getElementById('renoFee').value) || 0;
+            const sellPrice = parseFloat(document.getElementById('sellPrice').value) || 0;
+            const sellAgentFee = parseFloat(document.getElementById('sellAgentFee').value) || 0;
+            const taxRate = parseFloat(document.getElementById('holdingPeriod').value);
+
+            if(sellPrice === 0 || costPrice === 0) {
+                alert("請至少輸入「房屋取得成本」與「預計賣出金額」");
+                return;
+            }
+
+            let profitForTax = sellPrice - sellAgentFee - costPrice - buyAgentFee - miscFee - renoFee;
+            if (profitForTax < 0) profitForTax = 0;
+
+            const taxAmount = Math.round(profitForTax * taxRate);
+            const totalDeduction = costPrice + buyAgentFee + miscFee + sellAgentFee + taxAmount;
+            const realProfit = Math.round(sellPrice - totalDeduction);
+
+            document.getElementById('resultSection').style.display = 'block';
+            document.getElementById('taxResult').innerText = taxAmount.toLocaleString() + " 元";
+            document.getElementById('profitResult').innerText = realProfit.toLocaleString() + " 元";
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+
+</body>
+</html>
